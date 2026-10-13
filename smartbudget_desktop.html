@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>SmartBudget — Презентация и Версия для ПК</title>
+    <style>
+        :root {
+            --accent: #2b6ef6;
+            --bg: #0f172a;
+            --text: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Верхняя панель управления презентацией */
+        header {
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .brand-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-100 {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            font-weight: 700;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            letter-spacing: 0.5px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .view-btn {
+            background: #334155;
+            color: #cbd5e1;
+            border: 1px solid #475569;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            background: #475569;
+            color: #fff;
+        }
+
+        .view-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 14px rgba(43, 110, 246, 0.4);
+        }
+
+        .open-direct-btn {
+            background: #10b981;
+            color: #fff;
+            text-decoration: none;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .open-direct-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Область предпросмотра */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+            overflow: auto;
+            padding: 16px;
+        }
+
+        /* Режим рабочего стола: 100% */
+        .frame-desktop {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0;
+            background: #f8fafc;
+            box-shadow: none;
+        }
+
+        /* Режим мобильного симулятора (iPhone) */
+        .frame-mobile-wrapper {
+            width: 390px;
+            height: 800px;
+            max-height: 92vh;
+            background: #000;
+            border-radius: 46px;
+            padding: 12px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 0 2px #475569;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .phone-notch {
+            width: 120px;
+            height: 24px;
+            background: #000;
+            border-radius: 0 0 16px 16px;
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+
+        .frame-mobile {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 36px;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand-info">
+            <strong>SmartBudget</strong>
+            <span style="font-size:12px;color:#94a3b8">Web & Mobile Preview</span>
+            <span class="badge-100">ONLINE</span>
+        </div>
+
+        <div class="controls">
+            <button class="view-btn active" id="btn-desktop" onclick="setMode('desktop')">
+                💻 Полный экран (ПК)
+            </button>
+            <button class="view-btn" id="btn-mobile" onclick="setMode('mobile')">
+                📱 Мобильный симулятор (Смартфон)
+            </button>
+            <a href="smartbudget.html" class="open-direct-btn" target="_blank">
+                ↗ Открыть напрямую
+            </a>
+        </div>
+    </header>
+
+    <main id="preview-area">
+        <iframe id="app-frame" class="frame-desktop" src="smartbudget.html"></iframe>
+    </main>
+
+    <script>
+        function setMode(mode) {
+            const area = document.getElementById('preview-area');
+            const btnDesktop = document.getElementById('btn-desktop');
+            const btnMobile = document.getElementById('btn-mobile');
+
+            if (mode === 'desktop') {
+                btnDesktop.classList.add('active');
+                btnMobile.classList.remove('active');
+                area.innerHTML = '<iframe id="app-frame" class="frame-desktop" src="smartbudget.html"></iframe>';
+            } else {
+                btnMobile.classList.add('active');
+                btnDesktop.classList.remove('active');
+                area.innerHTML = `
+                    <div class="frame-mobile-wrapper">
+                        <div class="phone-notch"></div>
+                        <iframe id="app-frame" class="frame-mobile" src="smartbudget.html"></iframe>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>
