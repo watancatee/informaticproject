@@ -1,0 +1,2 @@
+# informaticproject
+SmartBudget project
